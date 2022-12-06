@@ -8,7 +8,7 @@ pipeline {
       steps {
         script {
 
-        sh "node config ls"
+        sh "npm config ls"
         }
       }
     }
