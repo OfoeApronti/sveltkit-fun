@@ -1,10 +1,20 @@
 pipeline {
-  agent any
-  tools {
-    nodejs "node"
-  }
+  agent none
   stages {
+    stage('test'){
+      steps {
+        script{
+          echo "Testing the application"
+          echo "Executing pipeline for $BRANCH_NAME"
+        }
+      }
+    }
     stage("build"){
+      when {
+        expression {
+          BRANCH_NAME == 'main'
+        }
+      }
       steps {
         script {
 
@@ -12,20 +22,12 @@ pipeline {
         }
       }
     }
-    stage("build image"){
-      steps {
-        script{
-          echo 'building the docker image'
-          withCredentials([usernamePassword(credentialsId: 'nexus-docker-repo', passwordVariable:'PWD',
-          usernameVariable: 'USER')]){
-            sh "docker build -t localhost:8083/my-app:1.3 ."
-            sh "echo $PWD | docker login -u $USER --password-stdin localhost:8083"
-            sh "docker push localhost:8083/my-app:1.3"
-          }
+    stage("deploy"){
+      when {
+        expression {
+          BRANCH_NAME == 'main'
         }
       }
-    }
-    stage("deploy"){
       steps{
         script{
           echo "deploy the app here"
