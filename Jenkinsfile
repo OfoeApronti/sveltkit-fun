@@ -32,7 +32,7 @@ pipeline {
           echo "deploy the app here"
           def dockerCmd = 'docker run -p 3080:3000 blowman/my-app:1.3'
           sshagent(['ec2-server-key']) {
-              sh "ssh -o StrictHostKeyChecking=no ec2-user@${EC2-DOCKER-SERVER} ${dockerCmd}"
+              sh "ssh -o StrictHostKeyChecking=no ec2-user@${EC2DOCKERSERVER} ${dockerCmd}"
           }
         }
       }
