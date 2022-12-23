@@ -3,6 +3,9 @@ pipeline {
   tools {
     nodejs "node"
   }
+  environment {
+    IMAGE_NAME = 'blowman/my-app:1.3'
+  }
   stages {
     stage("build"){
       steps {
@@ -48,9 +51,9 @@ pipeline {
         // }
         //
         script{
-          echo "deploy the app here using shell/bash script"
+          echo "deploy the app here using shell/bash script ${IMAGE_NAME}"
           //bash script approach
-          def bashCmd = "bash ./server-shell-cmds.sh"
+          def bashCmd = "bash ./server-shell-cmds.sh "
           sshagent(['ec2-server-key']) {
               sh "scp server-shell-cmds.sh ec2-user@${EC2DOCKERSERVER}:/home/ec2-user"
               sh "ssh -o StrictHostKeyChecking=no ec2-user@${EC2DOCKERSERVER} ${bashCmd}"

@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   sveltkit-app:
-    image: blowman/my-app:1.3
+    image: ${IMAGE}
     ports:
       - 3000:3000
   postgres:
