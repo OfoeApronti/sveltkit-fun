@@ -3,10 +3,10 @@ services:
   sveltkit-app:
     image: blowman/my-app:1.3
     ports:
-      - 3080:3000
+      - 3000:3000
   postgres:
     image: postgres:13
-    port:
+    ports:
       - 5432:5432
     environment:
       - POSTGRES_PASSWORD=my-pwd
