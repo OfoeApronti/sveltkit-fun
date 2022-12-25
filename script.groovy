@@ -10,8 +10,8 @@ def deployApp(){
 }
 def updateVersion(){
   echo "reading version"
-  sh "read ver <<< $(awk -F\":\" '/\"version\":.\"[0-9]\.[0-9]\.[0-9]/ {print $2;exit}' package.json | sed 's/,//; s/\"//g')"
-  sh "IFS=\".\" read -a version <<< $ver"
+  sh "read ver <<< $(awk -F\":\" '/\"version\":.\"[0-9]\.[0-9]\.[0-9]/ {print \$2;exit}' package.json | sed 's/,\/\/; s/\"\/\/g')"
+  sh "IFS=\".\" read -a version <<< ${ver}"
   echo "the package version: $version"
 
 }

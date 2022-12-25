@@ -1,3 +1,4 @@
+def gv
 pipeline {
   agent any
   tools {
@@ -7,10 +8,17 @@ pipeline {
     IMAGE_NAME = 'blowman/my-app:1.3'
   }
   stages {
+    stage("init"){
+      steps {
+        script {
+          gv = load "script.groovy"
+        }
+      }
+    }
     stage("setversion"){
       steps {
         script {
-          updateVersion()
+          gv.updateVersion()
         }
       }
     }
