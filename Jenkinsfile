@@ -1,4 +1,4 @@
-//def gv
+def gv
 pipeline {
   agent any
   tools {
@@ -11,19 +11,15 @@ pipeline {
     stage("init"){
       steps {
         script {
-          //gv = load "script.groovy"
-          echo "Initializing"
+          gv = load "script.groovy"
+          //echo "Initializing"
         }
       }
     }
     stage("setversion"){
       steps {
         script {
-          NEW_VERSION= sh(
-            script: "./getversion.sh",
-            returnStdout: true
-          ).trim()
-          echo "new version ${NEW_VERSION}"
+          gv.updateVersion()
         }
       }
     }
