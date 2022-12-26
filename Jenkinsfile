@@ -4,9 +4,9 @@ pipeline {
   tools {
     nodejs "node"
   }
-  environment {
-    IMAGE_NAME = 'blowman/my-app:1.3'
-  }
+  // environment {
+  //   IMAGE_NAME = 'blowman/my-app:1.3'
+  // }
   stages {
     stage("init"){
       steps {
@@ -33,13 +33,24 @@ pipeline {
     }
     stage("build image"){
       steps {
-        script{
-          echo 'building the docker image'
-          /* withCredentials([usernamePassword(credentialsId: 'nexus-docker-repo', passwordVariable:'PWD',
+        // //local deployment to nexus
+        // script{
+        //   echo 'building the docker image for local nexus'
+        //   withCredentials([usernamePassword(credentialsId: 'nexus-docker-repo', passwordVariable:'PWD',
+        //   usernameVariable: 'USER')]){
+        //     sh "docker build -t localhost:8083/${IMAGE_NAME} ."
+        //     sh "echo $PWD | docker login -u $USER --password-stdin localhost:8083"
+        //     sh "docker push localhost:8083/${IMAGE_NAME}"
+        //   } 
+
+        //deployment to docker hub
+          script{
+          echo 'building the docker image for dockerhub.com'
+          withCredentials([usernamePassword(credentialsId: 'nexus-docker-repo', passwordVariable:'PWD',
           usernameVariable: 'USER')]){
-            sh "docker build -t localhost:8083/my-app:1.3 ."
-            sh "echo $PWD | docker login -u $USER --password-stdin localhost:8083"
-            sh "docker push localhost:8083/my-app:1.3"
+            sh "docker build -t ${env.IMAGE_NAME} ."
+            sh "echo $PWD | docker login -u $USER --password-stdin"
+            sh "docker push ${env.IMAGE_NAME}"
           } */
           
         }
@@ -67,13 +78,28 @@ pipeline {
         // }
         //
         script{
-          echo "deploy the app here using shell/bash script ${IMAGE_NAME}"
+          echo "IMAGE_NAME ${IMAGE_NAME}"
+          echo "deploy the app here using shell/bash script ${env.IMAGE_NAME}"
           //bash script approach
-          def bashCmd = "bash ./server-shell-cmds.sh "
+          def bashCmd = "bash ./server-shell-cmds.sh ${env.IMAGE_NAME}"
           sshagent(['ec2-server-key']) {
               sh "scp server-shell-cmds.sh ec2-user@${EC2DOCKERSERVER}:/home/ec2-user"
               sh "ssh -o StrictHostKeyChecking=no ec2-user@${EC2DOCKERSERVER} ${bashCmd}"
           }
+        }
+      }
+    }
+    stage("post deployment"){
+      steps{
+        script{
+          sshagent(['bd3acd4b-51cf-4cd9-928e-9ed069bd0e92']) {
+                // some block
+                sh "git remote set-url origin git@gitlab.com:goapronti/nvim-setup.git"
+                sh "git add ."
+                sh 'git commit -m "ci: version bump"'
+                sh 'git push origin main'
+            }
+
         }
       }
     }

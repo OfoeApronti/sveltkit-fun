@@ -17,9 +17,15 @@ def deployApp(){
 // }
 def updateVersion(){
   fields=readJSON file: 'package.json'
-  versions= fields['version'].split('.')
-    printf("new_version: %s", versions)
-
+  versions= fields['version'].split("\\.")
+  major=versions[0]
+  minor=versions[1]
+  patch=versions[2]
+  patch+=patch
+  println("version")
+  printf("%s, %s, %s",major, minor, patch)
+  println("version printed")
+  env.IMAGE_NAME="blowman/my-app:"+major +"."+minor+"."+patch
 }
 def buildImage(){
 
