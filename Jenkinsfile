@@ -6,6 +6,7 @@ pipeline {
   }
   environment {
     IMAGE_NAME = 'blowman/my-app:1.3'
+    NEW_VERSION='0.0.0'
   }
   stages {
     stage("init"){
@@ -21,7 +22,9 @@ pipeline {
         script {
           def verCmd= "bash ./getversion.sh" 
           sh "${verCmd}"
-          echo "$NEW_VERSION"
+          echo "Image is : ${IMAGE_NAME}"
+          sh "${NEW_VERSION}=${verCmd}"
+          echo "new version ${NEW_VERSION}"
         }
       }
     }
