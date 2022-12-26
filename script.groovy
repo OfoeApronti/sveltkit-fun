@@ -10,7 +10,7 @@ def deployApp(){
 }
 def updateVersionsh(){
   echo "reading version"
-  sh "read ver <<< $(awk -F\":\" '/\"version\":.\"[0-9]\.[0-9]\.[0-9]/ {print ${2}}' package.json | sed 's/,\/\/; s/\"\/\/g')"
+  sh "read ver <<< $(awk -F\":\" '/\"version\":.\"[0-9]\.[0-9]\.[0-9]/ {print ${2}}' package.json | sed 's/,////; s/\"////g')"
   sh "IFS=\".\" read -a version <<< ${ver}"
   echo "the package version: $version"
 
