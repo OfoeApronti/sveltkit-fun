@@ -18,10 +18,7 @@ def deployApp(){
 def updateVersion(){
   fields=readJSON file: 'package.json'
   versions= fields['version'].split('.')
-    printf("new_version: %s", new_version)
-  println("versions", versions)
-
-  println(new_version)
+    printf("new_version: %s", versions)
 
 }
 def buildImage(){
