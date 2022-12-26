@@ -20,6 +20,8 @@ pipeline {
       steps {
         script {
           def verCmd= "bash ./getversion.sh" 
+          sh "${verCmd}"
+          echo "$NEW_VERSION"
         }
       }
     }
