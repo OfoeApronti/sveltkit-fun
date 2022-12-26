@@ -18,8 +18,9 @@ def deployApp(){
 def updateVersion(){
   fields=readJSON file: 'package.json'
   versions= fields['version'].split('.')
-  new_version=versions[2]+1
-  println("new_version")
+    printf("new_version: %s", new_version)
+  println("versions", versions)
+
   println(new_version)
 
 }
