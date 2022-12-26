@@ -1,4 +1,3 @@
-#!/bin/sh
 read ver <<< $(awk -F":" '/"version":."[0-9]\.[0-9]\.[0-9]/ {print $2;exit}' package.json | sed 's/,//; s/"//g')
 IFS=\".\" read -a version <<< ${ver}
 echo "The package version: $ver"
